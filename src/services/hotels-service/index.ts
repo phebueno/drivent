@@ -15,8 +15,7 @@ async function getHotels(userId: number) {
   if (ticket.status !== 'PAID') throw paymentRequiredError();
   //402 se tipoticket for remoto
   //402 se tipoticket não inclui hotel
-  if (!ticket.TicketType.includesHotel) throw serviceNotIncludedError();  
-  if(!ticket.TicketType.isRemote) throw serviceNotIncludedError();  
+  if (!ticket.TicketType.includesHotel || ticket.TicketType.isRemote) throw serviceNotIncludedError();  
   //404 se não existir hotéis
   const hotels = await hotelsRepository.getHotelsDB();
   if (!hotels) throw notFoundError();
