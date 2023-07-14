@@ -18,7 +18,7 @@ async function getHotels(userId: number) {
   if (!ticket.TicketType.includesHotel || ticket.TicketType.isRemote) throw serviceNotIncludedError();  
   //404 se não existir hotéis
   const hotels = await hotelsRepository.getHotelsDB();
-  if (!hotels) throw notFoundError();
+  if (hotels.length===0) throw notFoundError();
   return hotels;
 }
 
