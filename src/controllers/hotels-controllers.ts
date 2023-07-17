@@ -8,6 +8,6 @@ export async function getHotels(req: AuthenticatedRequest, res: Response) {
 }
 
 export async function getHotelById(req: AuthenticatedRequest, res: Response) {
-  const hotel = await hotelsService.getHotelById(Number(req.params.hotelId));
+  const hotel = await hotelsService.getHotelById(Number(req.params.hotelId), req.userId);
   res.send(hotel);
 }
