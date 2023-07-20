@@ -9,11 +9,18 @@ export async function createHotelWithRooms() {
       Rooms: {
         createMany: {
           data: [
-            { name: faker.word.adjective(), capacity: faker.datatype.number({ min: 1, max: 10 }) },
-            { name: faker.word.adjective(), capacity: faker.datatype.number({ min: 1, max: 10 }) },
+            generateRoom(),
+            generateRoom(),
           ],
         },
       },
     },
   });
+}
+
+export function generateRoom() {
+  return {
+    name: faker.word.adjective(),
+    capacity: faker.datatype.number({ min: 1, max: 10 }),
+  };
 }
