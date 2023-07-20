@@ -3,7 +3,7 @@ import { AuthenticatedRequest } from '../middlewares';
 import bookingsService from '../services/bookings-service';
 
 export async function getBooking(req: AuthenticatedRequest, res: Response) {
-  const booking = await bookingsService.getBooking();
+  const booking = await bookingsService.getBooking(req.userId);
   res.send(booking);
 }
 

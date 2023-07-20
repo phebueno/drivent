@@ -4,8 +4,10 @@ import { notFoundError } from '../../errors';
 import { roomRentalError } from './errors';
 import ticketsRepository from '../../repositories/tickets-repository';
 
-async function getBooking() {
-  return await bookingsRepository.getBookingDB();
+async function getBooking(userId: number) {
+  const bookingInfo = await bookingsRepository.getBookingDB(userId);
+  if(!bookingInfo) throw notFoundError("Booking not found!");
+  return { id: bookingInfo.id, Room: bookingInfo.Room };
 }
 
 async function createBooking(userId: number, roomId: number): Promise<Booking> {
