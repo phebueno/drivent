@@ -10,8 +10,15 @@ async function findTicketByEnrollmentId(enrollmentId: number) {
   return prisma.ticket.findFirst({
     where: { enrollmentId },
     include: {
-      TicketType: true
+      TicketType: true,
     },
+  });
+}
+
+async function findTicketByUserId(userId: number) {
+  return prisma.ticket.findFirst({
+    where: { Enrollment: { userId } },
+    include: { TicketType: true },
   });
 }
 
@@ -61,4 +68,5 @@ export default {
   findTickeyById,
   findTickeWithTypeById,
   ticketProcessPayment,
+  findTicketByUserId,
 };
