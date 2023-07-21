@@ -55,3 +55,44 @@ export async function createTicket(enrollmentId: number, ticketTypeId: number, s
     },
   });
 }
+
+export function generateTicketWithTicketType(
+  status: TicketStatus,
+  { isRemote = false, includesHotel = true }: GenTicketOptions = {},
+) {
+  return {
+    id: 1,
+    ticketTypeId: 1,
+    enrollmentId: 1,
+    status,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    TicketType: {
+      id: 1,
+      name: faker.name.findName(),
+      price: faker.datatype.number(),
+      isRemote,
+      includesHotel,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  };
+}
+
+type GenTicketOptions = { isRemote?: boolean; includesHotel?: boolean };
+
+// id: 1,
+//     ticketTypeId: 1,
+//     enrollmentId: 1,
+//     status: 'RESERVED',
+//     createdAt: new Date(),
+//     updatedAt: new Date(),
+//     TicketType: {
+//       id: 1,
+//       name: faker.name.findName(),
+//       price: faker.datatype.number(),
+//       isRemote: true,
+//       includesHotel: true,
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//     },

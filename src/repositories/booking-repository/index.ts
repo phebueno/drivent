@@ -12,10 +12,10 @@ async function updateBookingDB() {
   return 'seu booking update';
 }
 
-async function getRoomById(roomId: number) {
+async function getRoomByIdDB(roomId: number) {
   return prisma.room.findFirst({ where: { id: roomId }, include: { Booking: true } });
 }
 
-const bookingsRepository = { getBookingDB, createBookingDB, updateBookingDB, getRoomById };
+const bookingsRepository = { getBookingDB, createBookingDB, updateBookingDB, getRoomByIdDB };
 
 export default bookingsRepository;

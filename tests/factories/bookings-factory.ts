@@ -11,9 +11,32 @@ export function generateBooking(userId: number) {
 }
 
 export function generateBookingWithRoomInfo(userId: number) {
-  const booking = generateBooking(userId);
+  const bookingInfo = generateBooking(userId);
   return {
-    ...booking,
-    Room: { ...generateRoom(), id: booking.id, hotelId: 1, createdAt: new Date(), updatedAt: new Date() },
+    ...bookingInfo,
+    Room: { ...generateRoom(), id: bookingInfo.id, hotelId: 1, createdAt: new Date(), updatedAt: new Date() },
   };
 }
+
+export function generateRoomWithBookings(userId: number, options?: RoomOptions) {
+  const fullRoom = { ...generateRoom(), id: 1, hotelId: 1, createdAt: new Date(), updatedAt: new Date() };
+  let MAX_CAPACITY = options ? setRoomOptions(options, fullRoom.capacity) : fullRoom.capacity - 1;
+  if (options) setRoomOptions(options, fullRoom.capacity);
+  const Booking = [];
+  for (let i = 0; i < MAX_CAPACITY; i++) {
+    Booking.push({ id: 1, userId: i + 1, roomId: fullRoom.id, createdAt: new Date(), updatedAt: new Date() });
+  }
+  return {
+    ...fullRoom,
+    Booking,
+  };
+}
+
+function setRoomOptions(options: RoomOptions, capacity: number) {
+  if (options.fullRoom) return capacity;
+  else return capacity - 1;
+}
+
+type RoomOptions = {
+  fullRoom: boolean;
+};

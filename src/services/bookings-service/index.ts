@@ -11,8 +11,8 @@ async function getBooking(userId: number) {
 }
 
 async function createBooking(userId: number, roomId: number): Promise<Booking> {
-  const room = await bookingsRepository.getRoomById(roomId);
-  if (!room) throw notFoundError('No room found!');
+  const room = await bookingsRepository.getRoomByIdDB(roomId);
+  if (!room) throw notFoundError('Room not found!');
   if (room.Booking.length >= room.capacity) throw roomRentalError('No vacancies available for this room!');
   const ticket = await ticketsRepository.findTicketByUserId(userId);
   if (!ticket.TicketType.includesHotel || ticket.TicketType.isRemote || ticket.status !== 'PAID')
