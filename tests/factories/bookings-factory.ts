@@ -1,3 +1,4 @@
+import { prisma } from '@/config';
 import { generateRoom } from './hotels-factory';
 
 export function generateBooking(userId: number) {
@@ -8,6 +9,10 @@ export function generateBooking(userId: number) {
     createdAt: new Date(),
     updatedAt: new Date(),
   };
+}
+
+export function createBooking(userId: number, roomId: number) {
+  return prisma.booking.create({ data: { userId, roomId } });
 }
 
 export function generateBookingWithRoomInfo(userId: number) {

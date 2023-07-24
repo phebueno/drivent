@@ -3,6 +3,7 @@ import { prisma } from '@/config';
 
 export async function createHotelWithRooms() {
   return prisma.hotel.create({
+    include: {Rooms: true},
     data: {
       name: `${faker.company.companyName()} Hotel`,
       image: faker.internet.avatar(),
