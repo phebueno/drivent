@@ -128,3 +128,59 @@ describe('POST /booking', () => {
     });
   });
 });
+
+describe('UPDATE /booking/:id', () => {
+  it('should return error if user has no booking', () => {
+    const userId = 1;
+    jest.spyOn(bookingsRepository, 'userBookingDB').mockResolvedValueOnce(undefined);
+
+    const result = bookingsService.updateBooking(userId, 1);
+    expect(result).rejects.toEqual({
+      name: 'RoomRentalError',
+      message: 'No booking to update!',
+    });
+  });
+  it('should return error if room doesnt exist', () => {
+    const userId = 1;
+    jest
+      .spyOn(bookingsRepository, 'userBookingDB')
+      .mockResolvedValueOnce(generateBooking(userId));
+    jest.spyOn(bookingsRepository, 'getRoomByIdDB').mockResolvedValueOnce(undefined);
+
+    const result = bookingsService.updateBooking(userId, 999);
+    expect(result).rejects.toEqual({
+      name: 'NotFoundError',
+      message: 'Room not found!',
+    });
+  });
+  it('should return permission denied when room is full', () => {
+    const userId = 1;
+    jest
+      .spyOn(bookingsRepository, 'userBookingDB')
+      .mockResolvedValueOnce(generateBooking(userId));
+    const fullRoom = generateRoomWithBookings(userId, { fullRoom: true });
+     jest.spyOn(bookingsRepository, 'getRoomByIdDB').mockResolvedValueOnce(fullRoom);
+    const result = bookingsService.updateBooking(userId, 999);
+    expect(result).rejects.toEqual({
+      name: 'RoomRentalError',
+      message: 'No vacancies available for this room!',
+    });
+  });
+  it('should return updated booking', async () => {
+    const userId = 1;
+    jest
+      .spyOn(bookingsRepository, 'userBookingDB')
+      .mockResolvedValueOnce(generateBooking(userId));
+      const room = generateRoomWithBookings(userId);
+    jest.spyOn(bookingsRepository, 'getRoomByIdDB').mockResolvedValueOnce(room);
+    jest.spyOn(bookingsRepository, 'updateBookingDB').mockResolvedValueOnce({ id: 1, roomId: room.id, userId, createdAt: new Date(), updatedAt: new Date() })
+    const result = await bookingsService.updateBooking(userId, room.id);
+    expect(result).toEqual({
+      id: expect.any(Number),
+      userId,
+      roomId: room.id,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date)
+    });
+  });
+});
